@@ -2,6 +2,7 @@ package gaqlbuilder
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 )
 
@@ -12,6 +13,7 @@ type SelectBuilder interface {
 	Select(fields ...string) SelectBuilder
 	From(resource string) SelectBuilder
 	Where(exprs ...string) SelectBuilder
+	OrderBy(field string, order order) SelectBuilder
 }
 
 // NewSelectBuilder create a new SELECT builder with default values
@@ -23,6 +25,7 @@ type selectBuilder struct {
 	fields   []string
 	resource string
 	where    []string
+	orderBy  []string
 }
 
 // Select clause specifies a set of fields to fetch in the request
@@ -41,6 +44,11 @@ func (b *selectBuilder) Where(exprs ...string) SelectBuilder {
 	return b
 }
 
+func (b *selectBuilder) OrderBy(field string, order order) SelectBuilder {
+	b.orderBy = append(b.orderBy, fmt.Sprintf("%s %s", field, order))
+	return b
+}
+
 func (b *selectBuilder) Build() string {
 	buffer := &bytes.Buffer{}
 
@@ -53,6 +61,11 @@ func (b *selectBuilder) Build() string {
 	if len(b.where) > 0 {
 		buffer.WriteString(" WHERE ")
 		buffer.WriteString(strings.Join(b.where, " AND "))
+	}
+
+	if len(b.orderBy) > 0 {
+		buffer.WriteString(" ORDER BY ")
+		buffer.WriteString(strings.Join(b.orderBy, ", "))
 	}
 
 	return buffer.String()
