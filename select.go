@@ -1,7 +1,14 @@
 package gaqlbuilder
 
+import (
+	"bytes"
+	"strings"
+)
+
 // SelectBuilder is builder to build SELECT queries
 type SelectBuilder interface {
+	Builder
+
 	Select(fields ...string) SelectBuilder
 }
 
@@ -18,4 +25,13 @@ type selectBuilder struct {
 func (b *selectBuilder) Select(fields ...string) SelectBuilder {
 	b.fields = fields
 	return b
+}
+
+func (b *selectBuilder) Build() string {
+	buffer := &bytes.Buffer{}
+
+	buffer.WriteString("SELECT ")
+	buffer.WriteString(strings.Join(b.fields, ", "))
+
+	return buffer.String()
 }
