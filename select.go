@@ -10,6 +10,7 @@ type SelectBuilder interface {
 	Builder
 
 	Select(fields ...string) SelectBuilder
+	From(resource string) SelectBuilder
 }
 
 // NewSelectBuilder create a new SELECT builder with default values
@@ -18,7 +19,8 @@ func NewSelectBuilder() SelectBuilder {
 }
 
 type selectBuilder struct {
-	fields []string
+	fields   []string
+	resource string
 }
 
 // Select clause specifies a set of fields to fetch in the request
@@ -27,11 +29,19 @@ func (b *selectBuilder) Select(fields ...string) SelectBuilder {
 	return b
 }
 
+func (b *selectBuilder) From(resource string) SelectBuilder {
+	b.resource = resource
+	return b
+}
+
 func (b *selectBuilder) Build() string {
 	buffer := &bytes.Buffer{}
 
 	buffer.WriteString("SELECT ")
 	buffer.WriteString(strings.Join(b.fields, ", "))
+
+	buffer.WriteString(" FROM ")
+	buffer.WriteString(b.resource)
 
 	return buffer.String()
 }

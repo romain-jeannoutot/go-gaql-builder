@@ -11,8 +11,8 @@ func TestBuild(t *testing.T) {
 		builder SelectBuilder
 		query   string
 	}{{
-		builder: NewSelectBuilder().Select("campaign.id", "campaign.name"),
-		query:   "SELECT campaign.id, campaign.name",
+		builder: NewSelectBuilder().Select("campaign.id", "campaign.name").From("ad_group"),
+		query:   "SELECT campaign.id, campaign.name FROM ad_group",
 	}}
 
 	for _, test := range tests {
