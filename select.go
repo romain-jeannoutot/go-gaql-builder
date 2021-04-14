@@ -3,6 +3,7 @@ package gaqlbuilder
 import (
 	"bytes"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -12,6 +13,7 @@ type SelectBuilder struct {
 	resource string
 	where    []string
 	orderBy  []string
+	limit    uint
 }
 
 // NewSelectBuilder create a new SELECT builder with default values
@@ -40,6 +42,11 @@ func (b *SelectBuilder) OrderBy(field string, order Order) *SelectBuilder {
 	return b
 }
 
+func (b *SelectBuilder) Limit(limit uint) *SelectBuilder {
+	b.limit = limit
+	return b
+}
+
 func (b *SelectBuilder) Build() string {
 	buffer := &bytes.Buffer{}
 
@@ -57,6 +64,11 @@ func (b *SelectBuilder) Build() string {
 	if len(b.orderBy) > 0 {
 		buffer.WriteString(" ORDER BY ")
 		buffer.WriteString(strings.Join(b.orderBy, ", "))
+	}
+
+	if b.limit > 0 {
+		buffer.WriteString(" LIMIT ")
+		buffer.WriteString(strconv.Itoa(int(b.limit)))
 	}
 
 	return buffer.String()
