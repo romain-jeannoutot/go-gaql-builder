@@ -9,7 +9,7 @@ import (
 // SelectBuilder is builder to build SELECT queries
 type SelectBuilder struct {
 	fields   []string
-	resource string
+	resource resource
 	where    where
 	orderBy  orderBy
 	limit    limit
@@ -26,8 +26,8 @@ func (b *SelectBuilder) Select(fields ...string) *SelectBuilder {
 	return b
 }
 
-func (b *SelectBuilder) From(resource string) *SelectBuilder {
-	b.resource = resource
+func (b *SelectBuilder) From(res string) *SelectBuilder {
+	b.resource = resource(res)
 	return b
 }
 
@@ -53,7 +53,7 @@ func (b *SelectBuilder) Build() string {
 	buffer.WriteString(strings.Join(b.fields, ", "))
 
 	buffer.WriteString(" FROM ")
-	buffer.WriteString(b.resource)
+	buffer.WriteString(b.resource.String())
 
 	if len(b.where) > 0 {
 		buffer.WriteString(" WHERE ")
