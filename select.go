@@ -35,7 +35,7 @@ func (b *SelectBuilder) Where(exprs ...string) *SelectBuilder {
 	return b
 }
 
-func (b *SelectBuilder) OrderBy(field string, order order) *SelectBuilder {
+func (b *SelectBuilder) OrderBy(field string, order Order) *SelectBuilder {
 	b.orderBy = append(b.orderBy, fmt.Sprintf("%s %s", field, order))
 	return b
 }

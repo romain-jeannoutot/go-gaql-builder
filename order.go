@@ -2,13 +2,13 @@ package gaqlbuilder
 
 const (
 	// OrderAsc order result ascending
-	OrderAsc order = "ASC"
+	OrderAsc Order = "ASC"
 	// OrderDesc order result descending
-	OrderDesc order = "DESC"
+	OrderDesc Order = "DESC"
 )
 
-type order string
+type Order string
 
-func (o order) String() string {
+func (o Order) String() string {
 	return string(o)
 }
