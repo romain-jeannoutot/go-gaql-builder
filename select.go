@@ -10,7 +10,7 @@ import (
 type SelectBuilder struct {
 	fields   []string
 	resource string
-	where    []string
+	where    where
 	orderBy  orderBy
 	limit    limit
 }
