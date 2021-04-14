@@ -12,7 +12,7 @@ type SelectBuilder struct {
 	resource string
 	where    []string
 	orderBy  []string
-	limit    uint
+	limit    limit
 }
 
 // NewSelectBuilder create a new SELECT builder with default values
@@ -41,8 +41,8 @@ func (b *SelectBuilder) OrderBy(cols ...string) *SelectBuilder {
 	return b
 }
 
-func (b *SelectBuilder) Limit(limit uint) *SelectBuilder {
-	b.limit = limit
+func (b *SelectBuilder) Limit(nb uint) *SelectBuilder {
+	b.limit = limit(nb)
 	return b
 }
 
