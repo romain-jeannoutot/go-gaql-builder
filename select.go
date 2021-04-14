@@ -8,7 +8,7 @@ import (
 
 // SelectBuilder is builder to build SELECT queries
 type SelectBuilder struct {
-	fields   []string
+	fields   fields
 	resource resource
 	where    where
 	orderBy  orderBy
