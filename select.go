@@ -11,7 +11,7 @@ type SelectBuilder struct {
 	fields   []string
 	resource string
 	where    []string
-	orderBy  []string
+	orderBy  orderBy
 	limit    limit
 }
 
