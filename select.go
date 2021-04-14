@@ -7,49 +7,40 @@ import (
 )
 
 // SelectBuilder is builder to build SELECT queries
-type SelectBuilder interface {
-	Builder
-
-	Select(fields ...string) SelectBuilder
-	From(resource string) SelectBuilder
-	Where(exprs ...string) SelectBuilder
-	OrderBy(field string, order order) SelectBuilder
-}
-
-// NewSelectBuilder create a new SELECT builder with default values
-func NewSelectBuilder() SelectBuilder {
-	return &selectBuilder{}
-}
-
-type selectBuilder struct {
+type SelectBuilder struct {
 	fields   []string
 	resource string
 	where    []string
 	orderBy  []string
 }
 
+// NewSelectBuilder create a new SELECT builder with default values
+func NewSelectBuilder() *SelectBuilder {
+	return &SelectBuilder{}
+}
+
 // Select clause specifies a set of fields to fetch in the request
-func (b *selectBuilder) Select(fields ...string) SelectBuilder {
+func (b *SelectBuilder) Select(fields ...string) *SelectBuilder {
 	b.fields = fields
 	return b
 }
 
-func (b *selectBuilder) From(resource string) SelectBuilder {
+func (b *SelectBuilder) From(resource string) *SelectBuilder {
 	b.resource = resource
 	return b
 }
 
-func (b *selectBuilder) Where(exprs ...string) SelectBuilder {
+func (b *SelectBuilder) Where(exprs ...string) *SelectBuilder {
 	b.where = append(b.where, exprs...)
 	return b
 }
 
-func (b *selectBuilder) OrderBy(field string, order order) SelectBuilder {
+func (b *SelectBuilder) OrderBy(field string, order order) *SelectBuilder {
 	b.orderBy = append(b.orderBy, fmt.Sprintf("%s %s", field, order))
 	return b
 }
 
-func (b *selectBuilder) Build() string {
+func (b *SelectBuilder) Build() string {
 	buffer := &bytes.Buffer{}
 
 	buffer.WriteString("SELECT ")
