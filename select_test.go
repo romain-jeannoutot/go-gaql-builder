@@ -18,6 +18,11 @@ func TestBuild(t *testing.T) {
 			OrderBy("campaign.name ASC", "metrics.impressions DESC").
 			Limit(10),
 		query: "SELECT campaign.id, campaign.name FROM ad_group WHERE metrics.impressions > 0 AND segments.device = MOBILE ORDER BY campaign.name ASC, metrics.impressions DESC LIMIT 10",
+	}, {
+		builder: NewSelectBuilder().
+			Select("campaign.id", "campaign.name").
+			From("campaign"),
+		query: "SELECT campaign.id, campaign.name FROM campaign",
 	}}
 
 	for _, test := range tests {

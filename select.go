@@ -1,8 +1,7 @@
 package gaqlbuilder
 
 import (
-	"bytes"
-	"strconv"
+	"fmt"
 	"strings"
 )
 
@@ -46,29 +45,17 @@ func (b *SelectBuilder) Limit(nb uint) *SelectBuilder {
 	return b
 }
 
+func (b *SelectBuilder) build(strs ...fmt.Stringer) string {
+	var ss []string
+	for _, str := range strs {
+		if s := str.String(); s != "" {
+			ss = append(ss, s)
+		}
+	}
+
+	return strings.Join(ss, " ")
+}
+
 func (b *SelectBuilder) Build() string {
-	buffer := &bytes.Buffer{}
-
-	buffer.WriteString("SELECT ")
-	buffer.WriteString(strings.Join(b.fields, ", "))
-
-	buffer.WriteString(" FROM ")
-	buffer.WriteString(b.resource.String())
-
-	if len(b.where) > 0 {
-		buffer.WriteString(" WHERE ")
-		buffer.WriteString(strings.Join(b.where, " AND "))
-	}
-
-	if len(b.orderBy) > 0 {
-		buffer.WriteString(" ORDER BY ")
-		buffer.WriteString(strings.Join(b.orderBy, ", "))
-	}
-
-	if b.limit > 0 {
-		buffer.WriteString(" LIMIT ")
-		buffer.WriteString(strconv.Itoa(int(b.limit)))
-	}
-
-	return buffer.String()
+	return b.build(b.fields, b.resource, b.where, b.orderBy, b.limit)
 }
