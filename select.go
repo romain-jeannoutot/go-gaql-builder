@@ -2,7 +2,6 @@ package gaqlbuilder
 
 import (
 	"bytes"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -37,8 +36,8 @@ func (b *SelectBuilder) Where(exprs ...string) *SelectBuilder {
 	return b
 }
 
-func (b *SelectBuilder) OrderBy(field string, order Order) *SelectBuilder {
-	b.orderBy = append(b.orderBy, fmt.Sprintf("%s %s", field, order))
+func (b *SelectBuilder) OrderBy(cols ...string) *SelectBuilder {
+	b.orderBy = cols
 	return b
 }
 
